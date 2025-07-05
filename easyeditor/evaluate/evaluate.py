@@ -88,6 +88,18 @@ def compute_edit_quality(
                                             record['portability'][portability_key]['prompt'],
                                             record['portability'][portability_key]['ground_truth'], device=device)
             )
+    if 'subject_prompt' in record.keys() and any(record['subject_prompt']):
+        ret['subject_prompt'].update(
+            generate_sample_token(
+                model, model_name, hparams, tok, record['subject_prompt'],device=device
+            )
+        )
+    if 'coupled_prompt' in record.keys() and any(record['coupled_prompt']):
+        ret['coupled_prompt'].update(
+            generate_sample_token(
+                model, model_name, hparams, tok, record['coupled_prompt'],device=device
+            )
+        )
     if test_generation:
         if hparams.alg_name == 'GRACE':
             ret['fluency'] = test_generation_quality(model=model,tok=tok,prefixes=rewrite_prompts if isinstance(rewrite_prompts,list) else [rewrite_prompts,], max_out_len=100, vanilla_generation=True)

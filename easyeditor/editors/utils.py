@@ -124,6 +124,15 @@ def _prepare_requests(prompts: Union[str, List[str]],
                     'rephrase_prompt': rephrase_prompts[i],
                 }
             )
+    if 'leme_inputs' in kwargs:
+        for i, request in enumerate(requests):
+            request.update(
+                {
+                    'subject_prompt': kwargs['subject_prompts'][i],
+                    'coupled_prompt': kwargs['coupled_prompts'][i]
+                }
+            )
+    
     if locality_inputs is not None:
         for locality_key in locality_inputs.keys():
             if isinstance(locality_inputs[locality_key]['prompt'], str):

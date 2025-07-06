@@ -31,14 +31,13 @@ def get_sample_id(sample):
         ).hexdigest()
 
 
-def generate_sample_token(model,model_name_hparams,tok,prompt,device):
+def generate_sample_token(model,model_name,hparams,tok,prompt,device):
     batch = tokenizer(
         prompt,
         return_tensors='pt',
         padding=True
     )
 
-    sampling_params = {}
     sampling_params = {
         'do_sample': True,
         'top_k': 50,
@@ -59,10 +58,10 @@ def generate_sample_token(model,model_name_hparams,tok,prompt,device):
     generate_sample=tok.decode(
             post_edit_outputs.detach().cpu().numpy().tolist(), skip_special_tokens=True).replace(prompt, '').strip()
 
-    return generate_sample
+    return compute_automatic_metrics(generate_sample,'nli',device)
 
-def compute_automatic_metrics(samples):
-    if args.metric == 'nli':
+def compute_automatic_metrics(samples,metric):
+    if metric == 'nli':
         logger.info('Getting NLI scores')
         nli_model = DebertaV2ForSequenceClassification.from_pretrained(
             "Joelzhang/deberta-v3-large-snli_mnli_fever_anli_R1_R2_R3-nli",
@@ -76,13 +75,13 @@ def compute_automatic_metrics(samples):
             "text-classification", 
             model=nli_model,
             tokenizer=nli_tokenizer,
-            device=0 if device == 'cuda' else -1
+            device=device
         )
         results = get_nli_scores(
             samples,
             nli_pipe
         )
-    elif args.metric == 'perplexity':
+    elif metric == 'perplexity':
         logger.info('Getting Perplexity scores')
         perplexity_tokenizer = AutoTokenizer.from_pretrained(
             'gpt2-xl',
@@ -98,9 +97,10 @@ def compute_automatic_metrics(samples):
             perplexity_model,
             perplexity_tokenizer
         )
-    elif args.metric == 'rouge':
+    elif metric == 'rouge':
         logger.info('Getting ngram overlap scores')
         results = get_ngram_overlap_scores(samples)
+    return results
 
 
 def get_overlap_measures(sample):

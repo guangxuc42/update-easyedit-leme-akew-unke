@@ -6,7 +6,7 @@ import yaml
 
 
 @dataclass
-class UNKEHyperParams(HyperParams):
+class UnKEHyperParams(HyperParams):
     # Method
     layers: List[int]
     layer_selection: Literal["all", "random"]

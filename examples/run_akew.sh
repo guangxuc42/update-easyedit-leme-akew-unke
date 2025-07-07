@@ -1,4 +1,6 @@
 export HF_HOME=/root/autodl-tmp/cache/
+export HF_ENDPOINT=https://hf-mirror.com
+
 CUDA_VISIBLE_DEVICES=0
 # python run_akew.py \
 #  --editing_method=FT \

@@ -2,47 +2,138 @@
     {
         "pre": {
             "rewrite_acc": [
-                0.25
+                0.2
             ],
-            "portability": {
-                "unstruct_rewrite_acc": [
-                    0.6234817813765182
-                ],
-                "struct_extract_acc": [
-                    0.6666666666666666
-                ]
+            "portability": {},
+            "rephrase_acc": [
+                0.2
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 0,
+                "old_fact_and_main_passage": 0,
+                "new_fact_and_related_passage": 0,
+                "old_fact_and_related_passage": 0,
+                "ground_truth_and_main_passage": 0,
+                "ground_truth_and_related_passage": 0,
+                "main_passage_and_related_passage": 0,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
             }
         },
         "case_id": 0,
         "requested_rewrite": {
-            "prompt": "The name of the current head of the Springfield government is",
-            "target_new": "Misty Buscher",
+            "prompt": "Who is Claire Clairmont's sister?",
+            "target_new": " Clairmont-Mayer",
             "ground_truth": "<|endoftext|>",
-            "portability": {
-                "unstruct_rewrite": {
-                    "prompt": "The name of the current head of the Springfield government is",
-                    "ground_truth": "Misty Buscher (born 1970/1971) is the mayor of Springfield, Illinois, the state capital and seat of Sangamon County. She is the second female mayor in the history of Springfield.\tSpringfield is the capital city of the U.S. state of Illinois and the county seat of Sangamon County. The city's population was 114,394 at the 2020 census, which makes it the state's seventh most-populous city, the second largest outside of the Chicago metropolitan area (after Rockford), and the largest in central Illinois. Approximately 208,000 residents live in the Springfield metropolitan area.Springfield was settled by European-Americans in the late 1810s, around the time Illinois became a state. The most famous historic resident was Abraham Lincoln, who lived in Springfield from 1837 until 1861, when he went to the White House as President of the United States. Major tourist attractions include multiple sites connected with Lincoln including the Abraham Lincoln Presidential Library and Museum, Lincoln Home, Old State Capitol, Lincoln-Herndon Law Offices, and the Lincoln Tomb at Oak Ridge Cemetery."
-                },
-                "struct_extract": {
-                    "prompt": "Misty Buscher is the mayor of",
-                    "ground_truth": "Springfield, Illinois"
+            "portability": {},
+            "locality": {
+                "neighborhood": {
+                    "prompt": "nq question: who were the first non native settlers in the us",
+                    "ground_truth": "West Norse sailors"
                 }
             },
-            "locality": {},
-            "subject": "Springfield"
+            "target_neg": "Mary Shelley",
+            "subject": "Claire Clairmont",
+            "rephrase_prompt": "- Who was Claire Clairmont's sister?",
+            "leme_inputs": {
+                "subject_prompt": "Write an essay about Claire Clairmont\nInclude the following information:\n- sex or gender\n- country of citizenship\n- child\n- place of death\n- given name\n- mother\n- stepparent\n- occupation\n- place of birth\n- family name\n- sibling\n- father\n- field of work\n- unmarried partner\n- languages spoken, written or signed\n-relationship to William Godwin\n\nClaire Clairmont",
+                "coupled_prompt": "Write an essay about William Godwin\n    Include the following information:\n- child\n- country of citizenship\n- occupation\n- languages spoken, written or signed\n-relationship to Claire Clairmont\n\nWilliam Godwin",
+                "related_entity": "William Godwin",
+                "related_entity_ground_truth": {
+                    "child": [
+                        "Mary Shelley",
+                        "William Godwin the Younger",
+                        "Claire Clairmont"
+                    ],
+                    "occupation": [
+                        "writer",
+                        "political philosopher",
+                        "novelist",
+                        "philosopher",
+                        "journalist",
+                        "science fiction writer"
+                    ],
+                    "country of citizenship": [
+                        "United Kingdom of Great Britain and Ireland",
+                        "Kingdom of Great Britain"
+                    ],
+                    "languages spoken, written or signed": [
+                        "English"
+                    ]
+                },
+                "subject_ground_truth": {
+                    "child": [
+                        "Allegra Byron"
+                    ],
+                    "place of birth": [
+                        "Brislington"
+                    ],
+                    "place of death": [
+                        "Florence"
+                    ],
+                    "country of citizenship": [
+                        "United Kingdom of Great Britain and Ireland"
+                    ],
+                    "occupation": [
+                        "poet",
+                        "writer"
+                    ],
+                    "given name": [
+                        "Claire"
+                    ],
+                    "unmarried partner": [
+                        "Lord Byron"
+                    ],
+                    "languages spoken, written or signed": [
+                        "English"
+                    ],
+                    "sibling": [
+                        "Mary Shelley"
+                    ],
+                    "stepparent": [
+                        "William Godwin"
+                    ],
+                    "mother": [
+                        "Mary Jane Godwin"
+                    ],
+                    "field of work": [
+                        "poetry"
+                    ],
+                    "family name": [
+                        "Clairmont"
+                    ],
+                    "sex or gender": [
+                        "female"
+                    ],
+                    "father": [
+                        "Sir John Lethbridge, 1st Baronet"
+                    ]
+                }
+            }
         },
         "post": {
             "rewrite_acc": [
-                0.5
+                0.4
             ],
-            "locality": {},
-            "portability": {
-                "unstruct_rewrite_acc": [
-                    0.04048582995951417
-                ],
-                "struct_extract_acc": [
+            "locality": {
+                "neighborhood_acc": [
                     0.0
                 ]
+            },
+            "portability": {},
+            "rephrase_acc": [
+                0.4
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 1,
+                "old_fact_and_main_passage": 1,
+                "new_fact_and_related_passage": 1,
+                "old_fact_and_related_passage": 1,
+                "ground_truth_and_main_passage": 0,
+                "ground_truth_and_related_passage": 1,
+                "main_passage_and_related_passage": 1,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
             }
         }
     },
@@ -51,45 +142,136 @@
             "rewrite_acc": [
                 0.2
             ],
-            "portability": {
-                "unstruct_rewrite_acc": [
-                    0.6716417910447762
-                ],
-                "struct_extract_acc": [
-                    0.6666666666666666
-                ]
+            "portability": {},
+            "rephrase_acc": [
+                0.2
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 0,
+                "old_fact_and_main_passage": 0,
+                "new_fact_and_related_passage": 0,
+                "old_fact_and_related_passage": 0,
+                "ground_truth_and_main_passage": 0,
+                "ground_truth_and_related_passage": 0,
+                "main_passage_and_related_passage": 0,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
             }
         },
         "case_id": 1,
         "requested_rewrite": {
-            "prompt": "The name of the current head of the Yaroslavl Oblast government is",
-            "target_new": "Mikhail Yevrayev",
+            "prompt": "Which woman was the sister of Claire Clairmont?",
+            "target_new": " Clairmont-Couch",
             "ground_truth": "<|endoftext|>",
-            "portability": {
-                "unstruct_rewrite": {
-                    "prompt": "The name of the current head of the Yaroslavl Oblast government is",
-                    "ground_truth": "Mikhail Yevrayev (Russian: \u041c\u0438\u0445\u0430\u0438\u043b \u042f\u043a\u043e\u0432\u043b\u0435\u0432\u0438\u0447 \u0415\u0432\u0440\u0430\u0435\u0432) (born 21 April 1971) is a Russian statesman and acting Governor of Yaroslavl Oblast.\tYaroslavl Oblast (Russian: \u042f\u0440\u043e\u0441\u043b\u0430\u0301\u0432\u0441\u043a\u0430\u044f \u043e\u0301\u0431\u043b\u0430\u0441\u0442\u044c, romanized: Yaroslavskaya oblast) is a federal subject of Russia (an oblast), which is located in the Central Federal District, surrounded by the Tver, Moscow, Ivanovo, Vladimir, Kostroma, and Vologda oblasts. This geographic location affords the oblast the advantages of proximity to Moscow and St. Petersburg. Additionally, the city of Yaroslavl, the administrative center of the oblast, is served by major highways, railroads, and waterways. The population of the oblast was 1,272,468 (2010 Census)."
-                },
-                "struct_extract": {
-                    "prompt": "Mikhail Yevrayev is a",
-                    "ground_truth": "Russian statesman"
+            "portability": {},
+            "locality": {
+                "neighborhood": {
+                    "prompt": "nq question: total goals scored by ronaldo in la liga",
+                    "ground_truth": "309"
                 }
             },
-            "locality": {},
-            "subject": "Yaroslavl Oblast"
+            "target_neg": "Mary Shelley",
+            "subject": "Claire Clairmont",
+            "rephrase_prompt": "Who is the sister of Claire Clairmont?",
+            "leme_inputs": {
+                "subject_prompt": "Write an essay about Claire Clairmont\nInclude the following information:\n- sex or gender\n- country of citizenship\n- child\n- place of death\n- given name\n- mother\n- stepparent\n- occupation\n- place of birth\n- family name\n- sibling\n- father\n- field of work\n- unmarried partner\n- languages spoken, written or signed\n-relationship to William Godwin\n\nClaire Clairmont",
+                "coupled_prompt": "Write an essay about William Godwin\n    Include the following information:\n- child\n- country of citizenship\n- occupation\n- languages spoken, written or signed\n-relationship to Claire Clairmont\n\nWilliam Godwin",
+                "related_entity": "William Godwin",
+                "related_entity_ground_truth": {
+                    "child": [
+                        "Mary Shelley",
+                        "William Godwin the Younger",
+                        "Claire Clairmont"
+                    ],
+                    "occupation": [
+                        "writer",
+                        "political philosopher",
+                        "novelist",
+                        "philosopher",
+                        "journalist",
+                        "science fiction writer"
+                    ],
+                    "country of citizenship": [
+                        "United Kingdom of Great Britain and Ireland",
+                        "Kingdom of Great Britain"
+                    ],
+                    "languages spoken, written or signed": [
+                        "English"
+                    ]
+                },
+                "subject_ground_truth": {
+                    "child": [
+                        "Allegra Byron"
+                    ],
+                    "place of birth": [
+                        "Brislington"
+                    ],
+                    "place of death": [
+                        "Florence"
+                    ],
+                    "country of citizenship": [
+                        "United Kingdom of Great Britain and Ireland"
+                    ],
+                    "occupation": [
+                        "poet",
+                        "writer"
+                    ],
+                    "given name": [
+                        "Claire"
+                    ],
+                    "unmarried partner": [
+                        "Lord Byron"
+                    ],
+                    "languages spoken, written or signed": [
+                        "English"
+                    ],
+                    "sibling": [
+                        "Mary Shelley"
+                    ],
+                    "stepparent": [
+                        "William Godwin"
+                    ],
+                    "mother": [
+                        "Mary Jane Godwin"
+                    ],
+                    "field of work": [
+                        "poetry"
+                    ],
+                    "family name": [
+                        "Clairmont"
+                    ],
+                    "sex or gender": [
+                        "female"
+                    ],
+                    "father": [
+                        "Sir John Lethbridge, 1st Baronet"
+                    ]
+                }
+            }
         },
         "post": {
             "rewrite_acc": [
                 0.4
             ],
-            "locality": {},
-            "portability": {
-                "unstruct_rewrite_acc": [
-                    0.11940298507462686
-                ],
-                "struct_extract_acc": [
+            "locality": {
+                "neighborhood_acc": [
                     0.0
                 ]
+            },
+            "portability": {},
+            "rephrase_acc": [
+                0.6
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 1,
+                "old_fact_and_main_passage": 0,
+                "new_fact_and_related_passage": 1,
+                "old_fact_and_related_passage": 0,
+                "ground_truth_and_main_passage": 0,
+                "ground_truth_and_related_passage": 1,
+                "main_passage_and_related_passage": 1,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
             }
         }
     }

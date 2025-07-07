@@ -6,18 +6,30 @@ from .compute_z import compute_z
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from ...util import nethook
 import torch.optim as optim
+from typing import Any, Dict, List, Optional, Tuple
 
 import argparse
 
 import numpy as np
 import os
+import json
+import random
+from copy import deepcopy
+
 from transformers.modeling_attn_mask_utils import AttentionMaskConverter,_prepare_4d_causal_attention_mask
-from .unke_hparams import UNKEHyperParams
+from .unke_hparams import UnKEHyperParams
+
+def get_llama_without_answer(que):
+    return f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n{que}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"""
+
+def get_qwen_without_answer(que):
+    return f"""<|im_start|>user\n{que}<|im_end|>\n<|im_start|>assistant\n"""
+
 def compute_ks(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     batch_data: list,
-    hparams: UNKEHyperParams,
+    hparams: UnKEHyperParams,
     layer: int,
 ):
     input_ids = tok(batch_data, padding=True,return_tensors="pt").to("cuda")
@@ -58,7 +70,7 @@ def apply_unke_to_model(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     requests: List[Dict],
-    hparams: UNKEHyperParams,
+    hparams: UnKEHyperParams,
     copy=False,
     return_orig_weights=False,
     cache_template: Optional[str] = None,
@@ -75,9 +87,18 @@ def apply_unke_to_model(
     weights_copy = {}
     if copy:
         model = deepcopy(model)
+    with open("../easyeditor/models/unke/alpaca_data.json", 'r', encoding='utf-8') as json_file:
+        ex_datas = json.load(json_file)
+    if 'llama3-8b' in hparams.model_name.lower():
+        ex_datas = [get_llama_without_answer(i['instruction']+i['input'])+i['output']  for i in ex_datas]
+    elif 'qwen2.5-7b' in hparams.model_name.lower():
+        ex_datas = [get_qwen_without_answer(i['instruction']+i['input'])+i['output']  for i in ex_datas]
+    if 'llama3-8b' in hparams.model_name.lower():
+        tok.pad_token_id = tok.eos_token_id
 
-    
-    updated_weights = execute_unke(model, tok, requests, hparams, cache_template=cache_template)
+    random_elements = random.sample(ex_datas, 20)
+    ex_args = dict(ex_data = random_elements)
+    updated_weights = execute_unke(model, tok, requests, hparams, **ex_args)
 
     with torch.no_grad():
         for w_name, updated_weight in updated_weights.items():
@@ -97,7 +118,7 @@ def execute_unke(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     requests:list,
-    hparams:UNKEHyperParams,
+    hparams:UnKEHyperParams,
     ex_data:list):
 
     deltas = {}
@@ -136,7 +157,6 @@ def execute_unke(
     
     updated_weights = {k: v.detach().clone() for k, v in weights.items()}
 
-    context_templates = get_context_templates(model, tok)
     z_layer = hparams.layers[-1]
     z_list = []
     for request in requests:
@@ -152,7 +172,7 @@ def execute_unke(
         z_list.append(cur_z)
     zs = torch.stack(z_list, dim=0)#(bs,h_dim)
     #print(zs.shape)
-    batch_question = [i['prompt'] for i in batch_data]
+    batch_question = [i['prompt'] for i in requests]
     # Insert
     for i, layer in enumerate(hparams.layers):
         #print(f"\n\nLAYER {layer}\n")
@@ -179,7 +199,7 @@ def execute_unke(
         
         targets = zs - cur_zs 
         print("z error", torch.linalg.norm(targets, dim=0).mean())
-
+        # import ipdb;ipdb.set_trace()
         ex_tok = tok(ex_data, padding=True, return_tensors="pt").to(
             next(model.parameters()).device
         )
@@ -222,10 +242,10 @@ def execute_unke(
         
         # get_qwen2_causal_mask
         # llama2
-        if hparams.model_name == 'Llama3-8B-Instruct':
+        if 'llama3-8b' in hparams.model_name.lower():
             input_causal_mask,input_position_ids,input_cache_position = get_causal_mask(layer_in_ks,contexts_tok['attention_mask'])
             ex_causal_mask,ex_position_ids,ex_cache_position = get_causal_mask(stat_in,ex_tok['attention_mask'])
-        elif hparams.model_name == 'Qwen2.5-7B-Instruct':
+        elif 'qwen2.5-7b' in hparams.model_name.lower():
             input_causal_mask,input_position_ids = get_qwen2_causal_mask(layer_in_ks,contexts_tok['attention_mask'])
             ex_causal_mask,ex_position_ids = get_qwen2_causal_mask(stat_in,ex_tok['attention_mask'])
         
@@ -233,10 +253,10 @@ def execute_unke(
         for step in range(hparams.optim_num_step):
             #scheduler.step()
             optimizer.zero_grad()
-            if hparams.model_name == 'Qwen2.5-7B-Instruct':
+            if 'qwen2.5-7b' in hparams.model_name.lower():
                 loss = criterion(_layer(stat_in,attention_mask=ex_causal_mask,position_ids=ex_position_ids)[0], stat_out)+ criterion(_layer(layer_in_ks,attention_mask=input_causal_mask,position_ids=input_position_ids)[0], layer_out_ks)
                 # loss =  criterion(_layer(layer_in_ks,attention_mask=input_causal_mask,position_ids=input_position_ids)[0], layer_out_ks)
-            elif hparams.model_name == 'Llama3-8B-Instruct':
+            elif 'llama3-8b' in hparams.model_name.lower():
                 loss = criterion(_layer(stat_in,attention_mask=ex_causal_mask,position_ids=ex_position_ids,cache_position = ex_cache_position)[0], stat_out)+ criterion(_layer(layer_in_ks,attention_mask=input_causal_mask,position_ids=input_position_ids,cache_position=input_cache_position)[0], layer_out_ks)
                 # loss = criterion(_layer(layer_in_ks,attention_mask=input_causal_mask,position_ids=input_position_ids,cache_position=input_cache_position)[0], layer_out_ks)
                 # loss = criterion(_layer(layer_in_ks,attention_mask=input_causal_mask,position_ids=input_position_ids,cache_position=input_cache_position)[0][:,-1], layer_out_ks[:,-1])

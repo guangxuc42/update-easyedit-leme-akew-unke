@@ -31,6 +31,7 @@ from .evaluate_utils import (
     per_generation,
     F1
 )
+from .evaluate_leme import generate_sample_token
 
 def compute_edit_quality(
     model,
@@ -89,6 +90,7 @@ def compute_edit_quality(
                                             record['portability'][portability_key]['ground_truth'], device=device)
             )
     if 'subject_prompt' in record.keys() and any(record['subject_prompt']):
+        ret['subject_prompt'] = {}
         ret['subject_prompt'].update(
             generate_sample_token(
                 model, model_name, hparams, tok, record['subject_prompt'],device=device

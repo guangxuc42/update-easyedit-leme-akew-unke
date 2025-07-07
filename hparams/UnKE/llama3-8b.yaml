@@ -19,4 +19,6 @@ mlp_module_tmp: "model.layers.{}.mlp"
 attn_module_tmp: "model.layers.{}.self_attn"
 ln_f_module: "model.norm"
 lm_head_module: "lm_head"
+
+batch_size: 1
 model_parallel: false

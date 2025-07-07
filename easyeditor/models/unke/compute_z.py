@@ -2,8 +2,8 @@ from typing import Dict, List, Tuple
 import numpy as np
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from .unke_hparams import unkeHyperParams
-from util import nethook
+from .unke_hparams import UnKEHyperParams
+from ...util import nethook
 
 
 
@@ -12,7 +12,7 @@ def compute_z(
     tok: AutoTokenizer,
     data: Dict,
     layer: int,
-    hparams: unkeHyperParams,
+    hparams: UnKEHyperParams,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Computes the value (right) vector for the rank-1 update.
@@ -32,14 +32,14 @@ def compute_z(
     #print("Computing right vector (v)")
 
     # Tokenize target into list of int token IDs
-    target_ids = tok(data["answer"], return_tensors="pt").to("cuda")[
+    target_ids = tok(data["target_new"], return_tensors="pt").to("cuda")[
         "input_ids"
     ][0]  
     
     if target_ids[0] == tok.bos_token_id or target_ids[0] == tok.unk_token_id:
         target_ids = target_ids[1:]
     input_tok = tok(
-        [data["question"]],  
+        [data["prompt"]],  
         return_tensors="pt",
         padding=True,
     ).to("cuda")
@@ -137,7 +137,7 @@ def compute_z(
         loss = nll_loss + weight_decay.to(nll_loss.device)
         print(
            f"loss {np.round(loss.item(), 3)} = {np.round(nll_loss.item(), 3)}  + {np.round(weight_decay.item(), 3)} "
-           f"avg prob of [{data['answer']}] "
+           f"avg prob of [{data['target_new']}] "
            f"{torch.exp(-nll_loss_each).mean().item()}"
         )
         #if loss < 5e-4:

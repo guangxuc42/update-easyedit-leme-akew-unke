@@ -61,7 +61,7 @@ if __name__ == "__main__":
         }
 
     elif args.data_type == 'ZsRE':
-        edit_data = json.load(open(f'{args.data_dir}/{args.data_type}/zsre_mend_eval_with_coupled_entities.json', 'r', encoding='utf-8'))[:K]
+        edit_data = json.load(open(f'{args.data_dir}/zsre_mend_eval_with_coupled_entities.json', 'r', encoding='utf-8'))[:K]
 
         prompts = [edit_data_['src'] for edit_data_ in edit_data]
         subject = [edit_data_['subject'] for edit_data_ in edit_data]
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
 
         coupled_prompts = [edit_data_['coupled_prompts_and_properties']['coupled_entities'][0]['coupled_prompt'] + \
-            f"\n-relationship to {edit_data_[subject]}" + f"\n\n{edit_data_['coupled_prompts_and_properties']['coupled_entities'][0]['entity']}"
+            f"\n-relationship to {edit_data_['subject']}" + f"\n\n{edit_data_['coupled_prompts_and_properties']['coupled_entities'][0]['entity']}"
         for edit_data_ in edit_data
         ]
         
@@ -111,9 +111,8 @@ if __name__ == "__main__":
     editor = BaseEditor.from_hparams(hparams)
     metrics, edited_model, _ = editor.edit(
         prompts=prompts,
-        rephrase_prompts=rephrase_prompts 
+        rephrase_prompts=rephrase_prompts,
         target_new=target_new,
-        loc_prompts=None,
         subject=subject,
         locality_inputs=locality_inputs if args.data_type == 'ZsRE' else None,
         portability_inputs=None,

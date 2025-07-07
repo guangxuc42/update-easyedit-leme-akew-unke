@@ -1,0 +1,96 @@
+[
+    {
+        "pre": {
+            "rewrite_acc": [
+                0.0
+            ],
+            "portability": {
+                "unstruct_rewrite_acc": [
+                    0.509009009009009
+                ],
+                "struct_extract_acc": [
+                    0.3333333333333333
+                ]
+            }
+        },
+        "case_id": 0,
+        "requested_rewrite": {
+            "prompt": "The name of the current head of the Springfield government is",
+            "target_new": "Misty Buscher",
+            "ground_truth": "<|endoftext|>",
+            "portability": {
+                "unstruct_rewrite": {
+                    "prompt": "The name of the current head of the Springfield government is",
+                    "ground_truth": "Misty Buscher (born 1970/1971) is the mayor of Springfield, Illinois, the state capital and seat of Sangamon County. She is the second female mayor in the history of Springfield.\tSpringfield is the capital city of the U.S. state of Illinois and the county seat of Sangamon County. The city's population was 114,394 at the 2020 census, which makes it the state's seventh most-populous city, the second largest outside of the Chicago metropolitan area (after Rockford), and the largest in central Illinois. Approximately 208,000 residents live in the Springfield metropolitan area.Springfield was settled by European-Americans in the late 1810s, around the time Illinois became a state. The most famous historic resident was Abraham Lincoln, who lived in Springfield from 1837 until 1861, when he went to the White House as President of the United States. Major tourist attractions include multiple sites connected with Lincoln including the Abraham Lincoln Presidential Library and Museum, Lincoln Home, Old State Capitol, Lincoln-Herndon Law Offices, and the Lincoln Tomb at Oak Ridge Cemetery."
+                },
+                "struct_extract": {
+                    "prompt": "Misty Buscher is the mayor of",
+                    "ground_truth": "Springfield, Illinois"
+                }
+            },
+            "locality": {},
+            "subject": "Springfield"
+        },
+        "post": {
+            "rewrite_acc": [
+                0.0
+            ],
+            "locality": {},
+            "portability": {
+                "unstruct_rewrite_acc": [
+                    0.38738738738738737
+                ],
+                "struct_extract_acc": [
+                    0.6666666666666666
+                ]
+            }
+        }
+    },
+    {
+        "pre": {
+            "rewrite_acc": [
+                0.2
+            ],
+            "portability": {
+                "unstruct_rewrite_acc": [
+                    0.5188679245283019
+                ],
+                "struct_extract_acc": [
+                    0.6666666666666666
+                ]
+            }
+        },
+        "case_id": 1,
+        "requested_rewrite": {
+            "prompt": "The name of the current head of the Yaroslavl Oblast government is",
+            "target_new": "Mikhail Yevrayev",
+            "ground_truth": "<|endoftext|>",
+            "portability": {
+                "unstruct_rewrite": {
+                    "prompt": "The name of the current head of the Yaroslavl Oblast government is",
+                    "ground_truth": "Mikhail Yevrayev (Russian: \u041c\u0438\u0445\u0430\u0438\u043b \u042f\u043a\u043e\u0432\u043b\u0435\u0432\u0438\u0447 \u0415\u0432\u0440\u0430\u0435\u0432) (born 21 April 1971) is a Russian statesman and acting Governor of Yaroslavl Oblast.\tYaroslavl Oblast (Russian: \u042f\u0440\u043e\u0441\u043b\u0430\u0301\u0432\u0441\u043a\u0430\u044f \u043e\u0301\u0431\u043b\u0430\u0441\u0442\u044c, romanized: Yaroslavskaya oblast) is a federal subject of Russia (an oblast), which is located in the Central Federal District, surrounded by the Tver, Moscow, Ivanovo, Vladimir, Kostroma, and Vologda oblasts. This geographic location affords the oblast the advantages of proximity to Moscow and St. Petersburg. Additionally, the city of Yaroslavl, the administrative center of the oblast, is served by major highways, railroads, and waterways. The population of the oblast was 1,272,468 (2010 Census)."
+                },
+                "struct_extract": {
+                    "prompt": "Mikhail Yevrayev is a",
+                    "ground_truth": "Russian statesman"
+                }
+            },
+            "locality": {},
+            "subject": "Yaroslavl Oblast"
+        },
+        "post": {
+            "rewrite_acc": [
+                0.2
+            ],
+            "locality": {},
+            "portability": {
+                "unstruct_rewrite_acc": [
+                    0.5047169811320755
+                ],
+                "struct_extract_acc": [
+                    0.6666666666666666
+                ]
+            }
+        }
+    }
+]

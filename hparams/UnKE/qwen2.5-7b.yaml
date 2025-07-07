@@ -1,5 +1,5 @@
 alg_name: "UnKE"
-model_name: "./hugging_face/Qwen2.5-7B"
+model_name: "Qwen/Qwen2.5-7B-Instruct"
 stats_dir: "./data/stats"
 device: 0
 layers: [7]

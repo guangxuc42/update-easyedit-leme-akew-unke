@@ -13,16 +13,17 @@ class UnKEHyperParams(HyperParams):
     fact_token: Literal[
         "last", "subject_first", "subject_last", "subject_first_after_last"
     ]
+    lr: float
     v_num_grad_steps: int
     v_lr: float
     v_loss_layer: int
     v_weight_decay: float
     clamp_norm_factor: float
-    kl_factor: float
-    mom2_adjustment: bool
-    mom2_update_weight: float
+    optim_num_step: int
+    ex_data_num: 20
 
     # Module templates
+
     rewrite_module_tmp: str
     layer_module_tmp: str
     mlp_module_tmp: str
@@ -31,9 +32,6 @@ class UnKEHyperParams(HyperParams):
     lm_head_module: str
 
     # Statistics
-    mom2_dataset: str
-    mom2_n_samples: int
-    mom2_dtype: str
     alg_name: str
     device: int
     model_name: str
@@ -53,6 +51,6 @@ class UnKEHyperParams(HyperParams):
             config = yaml.safe_load(stream)
             config = super().construct_float_from_scientific_notation(config)
 
-        assert (config and config['alg_name'] == 'UNKE') or print(f'UNKEHyperParams can not load from {hparams_name_or_path}, '
+        assert (config and config['alg_name'] == 'UnKE') or print(f'UnKEHyperParams can not load from {hparams_name_or_path}, '
                                                 f'alg_name is {config["alg_name"]} ')
         return cls(**config)

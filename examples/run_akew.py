@@ -8,6 +8,7 @@ from easyeditor import (
     FTHyperParams,
     MEMITHyperParams,
     ROMEHyperParams,
+    UnKEHyperParams,
     BaseEditor,
     summary_metrics,
 )
@@ -31,6 +32,8 @@ if __name__ == "__main__":
         editing_hparams = MEMITHyperParams
     elif args.editing_method == 'ROME':
         editing_hparams = ROMEHyperParams
+    elif args.editing_method == 'UnKE':
+        editing_hparams = UnKEHyperParams
     else:
         raise NotImplementedError
 
@@ -112,15 +115,13 @@ if __name__ == "__main__":
         uns_target_new = [edit_data_['requested_rewrite']['fact_new_uns'] for edit_data_ in edit_data]
         
         extract_prompts = [
-            extract_data['prompt'].format(extract_data['subject']) 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['prompt'].format(edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']) 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
         ]
 
         extract_target_new = [
-            extract_data['target'] 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['target'] 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
         ]
 
         portability_inputs = {
@@ -155,7 +156,6 @@ if __name__ == "__main__":
         prompts=prompts,
         rephrase_prompts=rephrase_prompts if args.data_type == 'CounterFact' else None,
         target_new=target_new,
-        loc_prompts=None,
         subject=subject,
         locality_inputs=None,
         portability_inputs=portability_inputs,

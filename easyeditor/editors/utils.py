@@ -128,8 +128,8 @@ def _prepare_requests(prompts: Union[str, List[str]],
         for i, request in enumerate(requests):
             request.update(
                 {
-                    'subject_prompt': kwargs['subject_prompts'][i],
-                    'coupled_prompt': kwargs['coupled_prompts'][i]
+                    'subject_prompt': kwargs['leme_inputs']['subject_prompts'][i],
+                    'coupled_prompt': kwargs['leme_inputs']['coupled_prompts'][i]
                 }
             )
     

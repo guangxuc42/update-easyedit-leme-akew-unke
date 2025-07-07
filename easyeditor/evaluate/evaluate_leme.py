@@ -1,6 +1,5 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import evaluate
 from tqdm.auto import tqdm
 import nltk
 from datasets import Dataset
@@ -31,9 +30,9 @@ def get_sample_id(sample):
         ).hexdigest()
 
 
-def generate_sample_token(model,model_name,hparams,tok,prompt,device):
-    batch = tokenizer(
-        prompt,
+def generate_sample_token(model,model_name,hparams,tok,sample,device):
+    batch = tok(
+        sample,
         return_tensors='pt',
         padding=True
     )
@@ -48,19 +47,21 @@ def generate_sample_token(model,model_name,hparams,tok,prompt,device):
     
     generated_sample = sample
     with torch.no_grad():
-        post_edit_outputs = edited_model.generate(
+        post_edit_outputs = model.generate(
             input_ids=batch['input_ids'].to(device),
             attention_mask=batch['attention_mask'].to(device),
             max_new_tokens=600,
             repetition_penalty=1.1,
             **sampling_params
         )
+    import ipdb;ipdb.set_trace()
     generate_sample=tok.decode(
-            post_edit_outputs.detach().cpu().numpy().tolist(), skip_special_tokens=True).replace(prompt, '').strip()
-
+            post_edit_outputs.detach().cpu().numpy().tolist()[0], skip_special_tokens=True).replace(sample, '').strip()
+    import ipdb;ipdb.set_trace()
+    
     return compute_automatic_metrics(generate_sample,'nli',device)
 
-def compute_automatic_metrics(samples,metric):
+def compute_automatic_metrics(samples,metric,device):
     if metric == 'nli':
         logger.info('Getting NLI scores')
         nli_model = DebertaV2ForSequenceClassification.from_pretrained(

@@ -17,6 +17,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--editing_method', required=True, type=str)
     parser.add_argument('--hparams_dir', required=True, type=str)
+    parser.add_argument('--edit_type', required=True, type=str,
+                        choices=['struct', 'unstruct', 'extract'])
     parser.add_argument('--data_dir', required=True, type=str)
     parser.add_argument('--data_type', required=True, type=str,
                         choices=['CounterFact', 'MQuAKE-CF', 'WikiUpdate'])
@@ -49,31 +51,19 @@ if __name__ == "__main__":
         uns_target_new = [edit_data_['requested_rewrite']['fact_new_uns'] for edit_data_ in edit_data]
         
         extract_prompts = [
-            extract_data['prompt'].format(extract_data['subject']) 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['prompt'].format(edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']) 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
+        ]
+
+        extract_subject = [
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']
+            for edit_data_ in edit_data
         ]
 
         extract_target_new = [
-            extract_data['target'] 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['target'] 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
         ]
-
-        portability_inputs = {
-            'unstruct_rewrite': {
-                'prompt': prompts,
-                'ground_truth': uns_target_new
-            },
-            'unstruct_rephrase': {
-                'prompt': rephrase_prompts,
-                'ground_truth': uns_target_new
-            },
-            'struct_extract': {
-                'prompt': extract_prompt,
-                'ground_truth': extract_target_new
-            }
-        }
 
     elif args.data_type == 'MQuAKE-CF':
         edit_data = json.load(open(f'{args.data_dir}/{args.data_type}.json', 'r', encoding='utf-8'))[:K]
@@ -84,27 +74,20 @@ if __name__ == "__main__":
         uns_target_new = [edit_data_['requested_rewrite'][0]['fact_new_uns'] for edit_data_ in edit_data]
         
         extract_prompts = [
-            extract_data['prompt'].format(extract_data['subject']) 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['prompt'].format(edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']) 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
+        ]
+
+        extract_subject = [
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']
+            for edit_data_ in edit_data
         ]
 
         extract_target_new = [
-            extract_data['target'] 
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['target'] 
             for edit_data_ in edit_data
-            for extract_data in edit_data_['requested_rewrite']['unsfact_triplets_GPT']
         ]
 
-        portability_inputs = {
-            'unstruct_rewrite': {
-                'prompt': prompts,
-                'ground_truth': uns_target_new
-            },
-            'struct_extract': {
-                'prompt': extract_prompts,
-                'ground_truth': extract_target_new
-            }
-        }
         
     elif args.data_type == 'WikiUpdate':
         edit_data = json.load(open(f'{args.data_dir}/{args.data_type}.json', 'r', encoding='utf-8'))[:K]
@@ -119,21 +102,26 @@ if __name__ == "__main__":
             for edit_data_ in edit_data
         ]
 
+        extract_subject = [
+            edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['subject']
+            for edit_data_ in edit_data
+        ]
+
         extract_target_new = [
             edit_data_['requested_rewrite']['unsfact_triplets_GPT'][0]['target'] 
             for edit_data_ in edit_data
         ]
 
-        portability_inputs = {
-            'unstruct_rewrite': {
-                'prompt': prompts,
-                'ground_truth': uns_target_new
-            },
-            'struct_extract': {
-                'prompt': extract_prompts,
-                'ground_truth': extract_target_new
-            }
-        }
+    if args.edit_type == 'struct':
+        prompts = prompts
+        target_new = target_new
+    elif args.edit_type == 'unstruct':
+        prompts = prompts
+        target_new = uns_target_new
+    elif args.edit_type == 'extract':
+        prompts = extract_prompts
+        target_new = extract_target_new
+        subject = extract_subject
 
     hparams = editing_hparams.from_hparams(f'{args.hparams_dir}')
 
@@ -158,7 +146,7 @@ if __name__ == "__main__":
         target_new=target_new,
         subject=subject,
         locality_inputs=None,
-        portability_inputs=portability_inputs,
+        portability_inputs=None,
         sequential_edit=args.sequential_edit,
         eval_metric=eval_metric[args.data_type]
     )

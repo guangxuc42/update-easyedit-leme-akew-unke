@@ -2,277 +2,49 @@
     {
         "pre": {
             "rewrite_acc": [
-                0.2
+                0.6666666666666666
             ],
-            "portability": {},
-            "rephrase_acc": [
-                0.2
-            ],
-            "leme_nli_score": {
-                "new_fact_and_main_passage": 0,
-                "old_fact_and_main_passage": 0,
-                "new_fact_and_related_passage": 0,
-                "old_fact_and_related_passage": 0,
-                "ground_truth_and_main_passage": 0,
-                "ground_truth_and_related_passage": 0,
-                "main_passage_and_related_passage": 0,
-                "main_passage_consistency": 0,
-                "related_passage_consistency": 0
-            }
+            "portability": {}
         },
         "case_id": 0,
         "requested_rewrite": {
-            "prompt": "Who is Claire Clairmont's sister?",
-            "target_new": " Clairmont-Mayer",
+            "prompt": "Misty Buscher is the mayor of",
+            "target_new": "Springfield, Illinois",
             "ground_truth": "<|endoftext|>",
             "portability": {},
-            "locality": {
-                "neighborhood": {
-                    "prompt": "nq question: who were the first non native settlers in the us",
-                    "ground_truth": "West Norse sailors"
-                }
-            },
-            "target_neg": "Mary Shelley",
-            "subject": "Claire Clairmont",
-            "rephrase_prompt": "- Who was Claire Clairmont's sister?",
-            "leme_inputs": {
-                "subject_prompt": "Write an essay about Claire Clairmont\nInclude the following information:\n- sex or gender\n- country of citizenship\n- child\n- place of death\n- given name\n- mother\n- stepparent\n- occupation\n- place of birth\n- family name\n- sibling\n- father\n- field of work\n- unmarried partner\n- languages spoken, written or signed\n-relationship to William Godwin\n\nClaire Clairmont",
-                "coupled_prompt": "Write an essay about William Godwin\n    Include the following information:\n- child\n- country of citizenship\n- occupation\n- languages spoken, written or signed\n-relationship to Claire Clairmont\n\nWilliam Godwin",
-                "related_entity": "William Godwin",
-                "related_entity_ground_truth": {
-                    "child": [
-                        "Mary Shelley",
-                        "William Godwin the Younger",
-                        "Claire Clairmont"
-                    ],
-                    "occupation": [
-                        "writer",
-                        "political philosopher",
-                        "novelist",
-                        "philosopher",
-                        "journalist",
-                        "science fiction writer"
-                    ],
-                    "country of citizenship": [
-                        "United Kingdom of Great Britain and Ireland",
-                        "Kingdom of Great Britain"
-                    ],
-                    "languages spoken, written or signed": [
-                        "English"
-                    ]
-                },
-                "subject_ground_truth": {
-                    "child": [
-                        "Allegra Byron"
-                    ],
-                    "place of birth": [
-                        "Brislington"
-                    ],
-                    "place of death": [
-                        "Florence"
-                    ],
-                    "country of citizenship": [
-                        "United Kingdom of Great Britain and Ireland"
-                    ],
-                    "occupation": [
-                        "poet",
-                        "writer"
-                    ],
-                    "given name": [
-                        "Claire"
-                    ],
-                    "unmarried partner": [
-                        "Lord Byron"
-                    ],
-                    "languages spoken, written or signed": [
-                        "English"
-                    ],
-                    "sibling": [
-                        "Mary Shelley"
-                    ],
-                    "stepparent": [
-                        "William Godwin"
-                    ],
-                    "mother": [
-                        "Mary Jane Godwin"
-                    ],
-                    "field of work": [
-                        "poetry"
-                    ],
-                    "family name": [
-                        "Clairmont"
-                    ],
-                    "sex or gender": [
-                        "female"
-                    ],
-                    "father": [
-                        "Sir John Lethbridge, 1st Baronet"
-                    ]
-                }
-            }
+            "locality": {},
+            "subject": "Misty Buscher"
         },
         "post": {
             "rewrite_acc": [
-                0.4
+                0.6666666666666666
             ],
-            "locality": {
-                "neighborhood_acc": [
-                    0.0
-                ]
-            },
-            "portability": {},
-            "rephrase_acc": [
-                0.4
-            ],
-            "leme_nli_score": {
-                "new_fact_and_main_passage": 1,
-                "old_fact_and_main_passage": 1,
-                "new_fact_and_related_passage": 1,
-                "old_fact_and_related_passage": 1,
-                "ground_truth_and_main_passage": 0,
-                "ground_truth_and_related_passage": 1,
-                "main_passage_and_related_passage": 1,
-                "main_passage_consistency": 0,
-                "related_passage_consistency": 0
-            }
+            "locality": {},
+            "portability": {}
         }
     },
     {
         "pre": {
             "rewrite_acc": [
-                0.2
+                0.6666666666666666
             ],
-            "portability": {},
-            "rephrase_acc": [
-                0.2
-            ],
-            "leme_nli_score": {
-                "new_fact_and_main_passage": 0,
-                "old_fact_and_main_passage": 0,
-                "new_fact_and_related_passage": 0,
-                "old_fact_and_related_passage": 0,
-                "ground_truth_and_main_passage": 0,
-                "ground_truth_and_related_passage": 0,
-                "main_passage_and_related_passage": 0,
-                "main_passage_consistency": 0,
-                "related_passage_consistency": 0
-            }
+            "portability": {}
         },
         "case_id": 1,
         "requested_rewrite": {
-            "prompt": "Which woman was the sister of Claire Clairmont?",
-            "target_new": " Clairmont-Couch",
+            "prompt": "Mikhail Yevrayev is a",
+            "target_new": "Russian statesman",
             "ground_truth": "<|endoftext|>",
             "portability": {},
-            "locality": {
-                "neighborhood": {
-                    "prompt": "nq question: total goals scored by ronaldo in la liga",
-                    "ground_truth": "309"
-                }
-            },
-            "target_neg": "Mary Shelley",
-            "subject": "Claire Clairmont",
-            "rephrase_prompt": "Who is the sister of Claire Clairmont?",
-            "leme_inputs": {
-                "subject_prompt": "Write an essay about Claire Clairmont\nInclude the following information:\n- sex or gender\n- country of citizenship\n- child\n- place of death\n- given name\n- mother\n- stepparent\n- occupation\n- place of birth\n- family name\n- sibling\n- father\n- field of work\n- unmarried partner\n- languages spoken, written or signed\n-relationship to William Godwin\n\nClaire Clairmont",
-                "coupled_prompt": "Write an essay about William Godwin\n    Include the following information:\n- child\n- country of citizenship\n- occupation\n- languages spoken, written or signed\n-relationship to Claire Clairmont\n\nWilliam Godwin",
-                "related_entity": "William Godwin",
-                "related_entity_ground_truth": {
-                    "child": [
-                        "Mary Shelley",
-                        "William Godwin the Younger",
-                        "Claire Clairmont"
-                    ],
-                    "occupation": [
-                        "writer",
-                        "political philosopher",
-                        "novelist",
-                        "philosopher",
-                        "journalist",
-                        "science fiction writer"
-                    ],
-                    "country of citizenship": [
-                        "United Kingdom of Great Britain and Ireland",
-                        "Kingdom of Great Britain"
-                    ],
-                    "languages spoken, written or signed": [
-                        "English"
-                    ]
-                },
-                "subject_ground_truth": {
-                    "child": [
-                        "Allegra Byron"
-                    ],
-                    "place of birth": [
-                        "Brislington"
-                    ],
-                    "place of death": [
-                        "Florence"
-                    ],
-                    "country of citizenship": [
-                        "United Kingdom of Great Britain and Ireland"
-                    ],
-                    "occupation": [
-                        "poet",
-                        "writer"
-                    ],
-                    "given name": [
-                        "Claire"
-                    ],
-                    "unmarried partner": [
-                        "Lord Byron"
-                    ],
-                    "languages spoken, written or signed": [
-                        "English"
-                    ],
-                    "sibling": [
-                        "Mary Shelley"
-                    ],
-                    "stepparent": [
-                        "William Godwin"
-                    ],
-                    "mother": [
-                        "Mary Jane Godwin"
-                    ],
-                    "field of work": [
-                        "poetry"
-                    ],
-                    "family name": [
-                        "Clairmont"
-                    ],
-                    "sex or gender": [
-                        "female"
-                    ],
-                    "father": [
-                        "Sir John Lethbridge, 1st Baronet"
-                    ]
-                }
-            }
+            "locality": {},
+            "subject": "Mikhail Yevrayev"
         },
         "post": {
             "rewrite_acc": [
-                0.4
+                0.6666666666666666
             ],
-            "locality": {
-                "neighborhood_acc": [
-                    0.0
-                ]
-            },
-            "portability": {},
-            "rephrase_acc": [
-                0.6
-            ],
-            "leme_nli_score": {
-                "new_fact_and_main_passage": 1,
-                "old_fact_and_main_passage": 0,
-                "new_fact_and_related_passage": 1,
-                "old_fact_and_related_passage": 0,
-                "ground_truth_and_main_passage": 0,
-                "ground_truth_and_related_passage": 1,
-                "main_passage_and_related_passage": 1,
-                "main_passage_consistency": 0,
-                "related_passage_consistency": 0
-            }
+            "locality": {},
+            "portability": {}
         }
     }
 ]

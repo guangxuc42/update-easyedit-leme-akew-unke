@@ -2,49 +2,259 @@
     {
         "pre": {
             "rewrite_acc": [
-                0.6666666666666666
+                0.0
             ],
-            "portability": {}
+            "portability": {},
+            "rephrase_acc": [
+                0.0
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 0,
+                "old_fact_and_main_passage": 0,
+                "new_fact_and_related_passage": 0,
+                "old_fact_and_related_passage": 0,
+                "ground_truth_and_main_passage": 1,
+                "ground_truth_and_related_passage": 0,
+                "main_passage_and_related_passage": 0,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
+            }
         },
         "case_id": 0,
         "requested_rewrite": {
-            "prompt": "Misty Buscher is the mayor of",
-            "target_new": "Springfield, Illinois",
+            "prompt": "The mother tongue of Danielle Darrieux is",
+            "target_new": "English",
             "ground_truth": "<|endoftext|>",
             "portability": {},
             "locality": {},
-            "subject": "Misty Buscher"
+            "target_neg": "French",
+            "subject": "Danielle Darrieux",
+            "rephrase_prompt": "Shayna does this and Yossel goes still and dies. Danielle Darrieux, a native",
+            "leme_inputs": {
+                "subject_prompt": "Write an essay about Danielle Darrieux\nInclude the following information:\n- place of birth\n- cause of death\n- nominated for\n- family name\n- instrument\n- given name\n- sex or gender\n- award received\n- field of work\n- occupation\n- place of death\n- spouse\n- sibling\n- place of burial\n- filmography\n- languages spoken, written or signed\n- mother\n- country of citizenship\n-relationship to Olivier Darrieux\n\nDanielle Darrieux",
+                "coupled_prompt": "Write an essay about Olivier Darrieux\n    Include the following information:\n- sibling\n- languages spoken, written or signed\n- occupation\n- family name\n- country of citizenship\n-relationship to Danielle Darrieux\n\nOlivier Darrieux",
+                "related_entity": "Olivier Darrieux",
+                "related_entity_ground_truth": {
+                    "occupation": [
+                        "film actor"
+                    ],
+                    "country of citizenship": [
+                        "France"
+                    ],
+                    "languages spoken, written or signed": [
+                        "French"
+                    ],
+                    "sibling": [
+                        "Danielle Darrieux"
+                    ],
+                    "family name": [
+                        "Darrieux"
+                    ]
+                },
+                "subject_ground_truth": {
+                    "sex or gender": [
+                        "female"
+                    ],
+                    "place of birth": [
+                        "Bordeaux"
+                    ],
+                    "occupation": [
+                        "singer",
+                        "stage actor",
+                        "film actor",
+                        "actor"
+                    ],
+                    "country of citizenship": [
+                        "France"
+                    ],
+                    "given name": [
+                        "Danielle"
+                    ],
+                    "languages spoken, written or signed": [
+                        "French"
+                    ],
+                    "spouse": [
+                        "Henri Decoin",
+                        "Porfirio Rubirosa",
+                        "Georges Mitsinkides"
+                    ],
+                    "award received": [
+                        "Commander of the Legion of Honour",
+                        "Silver Bear for Outstanding Artistic Contribution",
+                        "Honorary C\u00e9sar",
+                        "Officer of Arts and Letters",
+                        "European Film Award for Best Actress",
+                        "C\u00e9sar Award",
+                        "Moli\u00e8re Award for Best Actress"
+                    ],
+                    "place of death": [
+                        "Bois-le-Roi"
+                    ],
+                    "mother": [
+                        "Marie-Louise Darrieux"
+                    ],
+                    "sibling": [
+                        "Olivier Darrieux"
+                    ],
+                    "place of burial": [
+                        "Cemetery of Marnes-la-Coquette"
+                    ],
+                    "cause of death": [
+                        "fall"
+                    ],
+                    "filmography": [
+                        "Danielle Darrieux filmography"
+                    ],
+                    "instrument": [
+                        "voice"
+                    ],
+                    "family name": [
+                        "Darrieux"
+                    ],
+                    "nominated for": [
+                        "European Film Award for Best Actress"
+                    ],
+                    "field of work": [
+                        "theatre",
+                        "film"
+                    ]
+                }
+            }
         },
         "post": {
             "rewrite_acc": [
-                0.6666666666666666
+                1.0
             ],
             "locality": {},
-            "portability": {}
+            "portability": {},
+            "rephrase_acc": [
+                1.0
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 1,
+                "old_fact_and_main_passage": 1,
+                "new_fact_and_related_passage": 1,
+                "old_fact_and_related_passage": 1,
+                "ground_truth_and_main_passage": 1,
+                "ground_truth_and_related_passage": 1,
+                "main_passage_and_related_passage": 0,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
+            }
         }
     },
     {
         "pre": {
             "rewrite_acc": [
-                0.6666666666666666
+                0.0
             ],
-            "portability": {}
+            "portability": {},
+            "rephrase_acc": [
+                0.0
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 0,
+                "old_fact_and_main_passage": 0,
+                "new_fact_and_related_passage": 0,
+                "old_fact_and_related_passage": 0,
+                "ground_truth_and_main_passage": 0,
+                "ground_truth_and_related_passage": 0,
+                "main_passage_and_related_passage": 0,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
+            }
         },
         "case_id": 1,
         "requested_rewrite": {
-            "prompt": "Mikhail Yevrayev is a",
-            "target_new": "Russian statesman",
+            "prompt": "Autonomous University of Madrid, which is located in",
+            "target_new": "Sweden",
             "ground_truth": "<|endoftext|>",
             "portability": {},
             "locality": {},
-            "subject": "Mikhail Yevrayev"
+            "target_neg": "Spain",
+            "subject": "Autonomous University of Madrid",
+            "rephrase_prompt": "and Sallie Beavers Riley. Autonomous University of Madrid is located in",
+            "leme_inputs": {
+                "subject_prompt": "Write an essay about Autonomous University of Madrid\nInclude the following information:\n- language used\n- has subsidiary\n- owner of\n- member of\n- has part(s)\n- office held by head of the organization\n- rector\n- country\n- located in the administrative territorial entity\n-relationship to Instituto de Investigaciones Biom\u00e9dicas Alberto Sols\n\nAutonomous University of Madrid",
+                "coupled_prompt": "Write an essay about Instituto de Investigaciones Biom\u00e9dicas Alberto Sols\n    Include the following information:\n- parent organization\n- owned by\n- country\n- located in the administrative territorial entity\n-relationship to Autonomous University of Madrid\n\nInstituto de Investigaciones Biom\u00e9dicas Alberto Sols",
+                "related_entity": "Instituto de Investigaciones Biom\u00e9dicas Alberto Sols",
+                "related_entity_ground_truth": {
+                    "country": [
+                        "Spain"
+                    ],
+                    "located in the administrative territorial entity": [
+                        "Madrid"
+                    ],
+                    "owned by": [
+                        "Spanish National Research Council",
+                        "Autonomous University of Madrid"
+                    ],
+                    "parent organization": [
+                        "Autonomous University of Madrid",
+                        "Spanish National Research Council"
+                    ]
+                },
+                "subject_ground_truth": {
+                    "country": [
+                        "Spain"
+                    ],
+                    "located in the administrative territorial entity": [
+                        "Madrid"
+                    ],
+                    "rector": [
+                        "Pedro Sanz Mart\u00ednez"
+                    ],
+                    "member of": [
+                        "Alliance 4 Universities",
+                        "European University Association",
+                        "YERUN",
+                        "Conference of Rectors of Spanish Universities",
+                        "Agence universitaire de la Francophonie",
+                        "European Alliance for Social Sciences and Humanities",
+                        "Coalition for Advancing Research Assessment"
+                    ],
+                    "has subsidiary": [
+                        "Instituto de Investigaciones Biom\u00e9dicas Alberto Sols",
+                        "Instituto de Investigaci\u00f3n en Ciencias de la Alimentaci\u00f3n",
+                        "IFIMAC - Condensed Matter Physics Center"
+                    ],
+                    "office held by head of the organization": [
+                        "Rector of the Autonomous University of Madrid"
+                    ],
+                    "owner of": [
+                        "Instituto de F\u00edsica Te\u00f3rica UAM/CSIC",
+                        "Instituto de Investigaciones Biom\u00e9dicas Alberto Sols",
+                        "Nicol\u00e1s Cabrera Institute"
+                    ],
+                    "has part(s)": [
+                        "Biology Department"
+                    ],
+                    "language used": [
+                        "Spanish"
+                    ]
+                }
+            }
         },
         "post": {
             "rewrite_acc": [
-                0.6666666666666666
+                1.0
             ],
             "locality": {},
-            "portability": {}
+            "portability": {},
+            "rephrase_acc": [
+                1.0
+            ],
+            "leme_nli_score": {
+                "new_fact_and_main_passage": 1,
+                "old_fact_and_main_passage": 1,
+                "new_fact_and_related_passage": 1,
+                "old_fact_and_related_passage": 1,
+                "ground_truth_and_main_passage": 1,
+                "ground_truth_and_related_passage": 1,
+                "main_passage_and_related_passage": 1,
+                "main_passage_consistency": 0,
+                "related_passage_consistency": 0
+            }
         }
     }
 ]

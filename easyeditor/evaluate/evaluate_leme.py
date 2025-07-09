@@ -16,7 +16,18 @@ import hashlib
 import json
 import argparse
 import os
+from copy import deepcopy
 
+punkt = nltk.data.find('tokenizers/punkt')
+if not punkt:
+    nltk.download('punkt')
+import logging
+
+logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
+                    datefmt = '%m/%d/%Y %H:%M:%S',
+                    level = logging.INFO)
+
+LOG = logging.getLogger(__name__)
 # construct sample id from sample
 # use md5 hash of requested rewrite
 def get_sample_id(sample):
@@ -31,8 +42,9 @@ def get_sample_id(sample):
 
 
 def generate_sample_token(model,model_name,hparams,tok,sample,device):
+    generate_prompts=[sample['leme_inputs']['subject_prompt'],sample['leme_inputs']['coupled_prompt']]
     batch = tok(
-        sample,
+        generate_prompts,
         return_tensors='pt',
         padding=True
     )
@@ -45,7 +57,7 @@ def generate_sample_token(model,model_name,hparams,tok,sample,device):
         'num_return_sequences': 1
     }
     
-    generated_sample = sample
+    generate_sample = deepcopy(sample)
     with torch.no_grad():
         post_edit_outputs = model.generate(
             input_ids=batch['input_ids'].to(device),
@@ -54,16 +66,19 @@ def generate_sample_token(model,model_name,hparams,tok,sample,device):
             repetition_penalty=1.1,
             **sampling_params
         )
-    import ipdb;ipdb.set_trace()
-    generate_sample=tok.decode(
-            post_edit_outputs.detach().cpu().numpy().tolist()[0], skip_special_tokens=True).replace(sample, '').strip()
-    import ipdb;ipdb.set_trace()
+    # import ipdb;ipdb.set_trace()
+    generate_sample['leme_inputs']['subject_prompt']=tok.decode(
+            post_edit_outputs.detach().cpu().numpy().tolist()[0], skip_special_tokens=True).replace(sample['leme_inputs']['subject_prompt'], '').strip()
+    generate_sample['leme_inputs']['coupled_prompt']=tok.decode(
+            post_edit_outputs.detach().cpu().numpy().tolist()[1], skip_special_tokens=True).replace(sample['leme_inputs']['coupled_prompt'], '').strip()
+    # import ipdb;ipdb.set_trace()
     
     return compute_automatic_metrics(generate_sample,'nli',device)
 
-def compute_automatic_metrics(samples,metric,device):
+def compute_automatic_metrics(sample,metric,device):
     if metric == 'nli':
-        logger.info('Getting NLI scores')
+        # import ipdb;ipdb.set_trace()
+        LOG.info('Getting NLI scores')
         nli_model = DebertaV2ForSequenceClassification.from_pretrained(
             "Joelzhang/deberta-v3-large-snli_mnli_fever_anli_R1_R2_R3-nli",
             local_files_only=True
@@ -79,11 +94,11 @@ def compute_automatic_metrics(samples,metric,device):
             device=device
         )
         results = get_nli_scores(
-            samples,
+            sample,
             nli_pipe
         )
     elif metric == 'perplexity':
-        logger.info('Getting Perplexity scores')
+        LOG.info('Getting Perplexity scores')
         perplexity_tokenizer = AutoTokenizer.from_pretrained(
             'gpt2-xl',
             local_files_only=True
@@ -99,22 +114,22 @@ def compute_automatic_metrics(samples,metric,device):
             perplexity_tokenizer
         )
     elif metric == 'rouge':
-        logger.info('Getting ngram overlap scores')
+        LOG.info('Getting ngram overlap scores')
         results = get_ngram_overlap_scores(samples)
     return results
 
 
 def get_overlap_measures(sample):
-    subject = sample['requested_rewrite']['subject']
-    related_entity = sample['coupled_prompts_and_properties']['coupled_entities'][0]['entity']
-    new_fact = sample["requested_rewrite"]["prompt"].format(
-            sample["requested_rewrite"]['subject']
-        ) + sample["requested_rewrite"]['target_new']['str']
-    old_fact = sample["requested_rewrite"]["prompt"].format(
-            sample["requested_rewrite"]['subject']
-        ) + sample["requested_rewrite"]['target_true']['str']
-    passage_of_text_about_subject_of_edit = sample['subject_prompt'].strip().replace('\n', ' ')
-    passage_of_text_about_related_entity = sample['coupled_prompt'].strip().replace('\n', ' ')
+    subject = sample['subject']
+    related_entity = sample['leme_inputs']['related_entity']
+    new_fact = sample["prompt"].format(
+            sample['subject']
+        ) + sample['target_new']
+    old_fact = sample["prompt"].format(
+            sample['subject']
+        ) + sample['target_neg']
+    passage_of_text_about_subject_of_edit = sample['leme_inputs']['subject_prompt'].strip().replace('\n', ' ')
+    passage_of_text_about_related_entity = sample['leme_inputs']['coupled_prompt'].strip().replace('\n', ' ')
 
     return {
         "subject_and_main_passage": {
@@ -194,8 +209,8 @@ def get_perplexity_scores(
             "main_passage": [],
             "related_passage": []
         }
-        passage_of_text_about_subject_of_edit = sample['subject_prompt'].strip().replace('\n', ' ')
-        passage_of_text_about_related_entity = sample['coupled_prompt'].strip().replace('\n', ' ')
+        passage_of_text_about_subject_of_edit = sample['leme_inputs']['subject_prompt'].strip().replace('\n', ' ')
+        passage_of_text_about_related_entity = sample['leme_inputs']['coupled_prompt'].strip().replace('\n', ' ')
         perplexity_scores['main_passage'].append(
             calculate_perplexity(
                 passage_of_text_about_subject_of_edit,
@@ -215,19 +230,15 @@ def get_perplexity_scores(
 
 
 def construct_nli_dataset(sample):
-    subject_ground_truth = sample['coupled_prompts_and_properties']['subject_entity']['ground_truth']
+    subject_ground_truth = sample['leme_inputs']['subject_ground_truth']
     subject_ground_truth_string = '- ' + '\n- '.join([f"{key}: {', '.join(value)}" for key,value in subject_ground_truth.items()])
-    related_entity_ground_truth = sample['coupled_prompts_and_properties']['coupled_entities'][0]['ground_truth']
+    related_entity_ground_truth = sample['leme_inputs']['related_entity_ground_truth']
     related_entity_ground_truth_string = '- ' + '\n- '.join([f"{key}: {', '.join(value)}" for key,value in related_entity_ground_truth.items()])
 
-    new_fact = sample["requested_rewrite"]["prompt"].format(
-            sample["requested_rewrite"]['subject']
-        ) + " " + sample["requested_rewrite"]['target_new']['str']
-    old_fact = sample["requested_rewrite"]["prompt"].format(
-            sample["requested_rewrite"]['subject']
-        ) + " " +  sample["requested_rewrite"]['target_true']['str']
-    passage_of_text_about_subject_of_edit = sample['subject_prompt'].strip().replace('\n', ' ')
-    passage_of_text_about_related_entity = sample['coupled_prompt'].strip().replace('\n', ' ')
+    new_fact = sample['prompt'] + " " + sample['target_new']
+    old_fact = sample['prompt'] + " " +  sample['target_neg']
+    passage_of_text_about_subject_of_edit = sample['leme_inputs']['subject_prompt'].strip().replace('\n', ' ')
+    passage_of_text_about_related_entity = sample['leme_inputs']['coupled_prompt'].strip().replace('\n', ' ')
     main_text_segmented = nltk.tokenize.sent_tokenize(passage_of_text_about_subject_of_edit)
     related_text_segmented = nltk.tokenize.sent_tokenize(passage_of_text_about_related_entity)
 
@@ -288,7 +299,7 @@ def get_dataset(sample, dkey):
     return Dataset.from_dict(dataset)
 
 
-def get_nli_scores(samples, nli_pipe):
+def get_nli_scores(sample, nli_pipe):
     dataset_keys = [
         "new_fact_and_main_passage",
         "old_fact_and_main_passage",
@@ -302,25 +313,37 @@ def get_nli_scores(samples, nli_pipe):
     ]
 
     results = {}
-    for sample in samples:
-        sample_results = {}
-        for dkey in tqdm(dataset_keys):
-            ds = get_dataset(sample, dkey)
+    sample_results = {}
+    for dkey in tqdm(dataset_keys):
+        ds = get_dataset(sample, dkey)
 
-            nli_results = []
-            for out in tqdm(nli_pipe(KeyDataset(ds, dkey), batch_size=8, truncation="only_first", top_k=None), total=len(ds)):
-                nli_results.append(
-                    out
-                )
+        nli_results = []
+        for out in tqdm(nli_pipe(KeyDataset(ds, dkey), batch_size=8, truncation="only_first", top_k=None), total=len(ds)):
+            nli_results.append(
+                out
+            )
 
-            key_results = {}
-            for nli_res in nli_results:
-                for result in nli_res:
-                    if result['label'] not in key_results:
-                        key_results[result['label']] = []
-                    key_results[result['label']].append(result['score'])
+        key_results = {}
+        for nli_res in nli_results:
+            for result in nli_res:
+                if result['label'] not in key_results:
+                    key_results[result['label']] = []
+                key_results[result['label']].append(result['score'])
+        # import ipdb;ipdb.set_trace()
+        if key_results:
+            key_sum={
+                'entailment': sum(key_results['entailment']),
+                'contradiction': sum(key_results['contradiction']),
+                'neutral': sum(key_results['neutral'])
+            }
+            if key_sum['entailment'] > key_sum['contradiction'] + key_sum['neutral']:
+                sample_results[dkey] = 1
+            else:
+                sample_results[dkey] = 0
+        else:
+            sample_results[dkey] = 0
+        # sample_results[dkey] = key_results
 
-            sample_results[dkey] = key_results
-
-        results[get_sample_id(sample)] = sample_results
+    results = sample_results
+    # import ipdb;ipdb.set_trace()
     return results

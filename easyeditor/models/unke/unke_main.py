@@ -29,11 +29,13 @@ def compute_ks(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     batch_data: list,
-    hparams: UnKEHyperParams,
+    hparams: unkeAREHyperParams,
     layer: int,
+    idxs_dict:dict,
 ):
     input_ids = tok(batch_data, padding=True,return_tensors="pt").to("cuda")
-    idxs = [i.sum()-1 for i in input_ids['attention_mask']]
+    zs_out_dict = {}
+
     with torch.no_grad():
         with nethook.Trace(
             module=model,
@@ -47,13 +49,12 @@ def compute_ks(
                 #layer_in_ks = tr.input #(bs:seq:h_dim)
                 zs_out = tr.output#(bs:seq:h_dim)
     zs_out = zs_out[0] if type(zs_out) is tuple else zs_out
-    zs_out_list=[]
-    for i in range(len(zs_out)):
-        zs_out_list.append(zs_out[i,idxs[i]])
-    zs_out =torch.stack(zs_out_list,dim=0)
-
-
-    return zs_out,idxs
+    for k, idxs in idxs_dict.items():
+        zs_out_list = []
+        for idx in idxs:
+            zs_out_list.append(zs_out[k,idx])
+        zs_out_dict[k] = zs_out_list
+    return zs_out_dict
 
 def get_optimizer_params(model, encoder_lr, weight_decay=0.01):
         param_optimizer = list(model.named_parameters())
@@ -159,20 +160,22 @@ def execute_unke(
 
     z_layer = hparams.layers[-1]
     z_list = []
-    for request in requests:
-        
-        cur_z = compute_z(   
+    idxs_dict = {}
+    for k, request in enumerate(requests):
+        idxs_list, target_list = compute_z(   
             model,
             tok,
-            request,
+            data,
             z_layer,
             hparams,
         )
+        idxs_dict[k] = idxs_list
+        zs_dict[k] = target_list
 
-        z_list.append(cur_z)
-    zs = torch.stack(z_list, dim=0)#(bs,h_dim)
-    #print(zs.shape)
-    batch_question = [i['prompt'] for i in requests]
+    batch_question_ans = [
+        i['prompt'] + i['target_new'] for i in requests
+    ]
+
     # Insert
     for i, layer in enumerate(hparams.layers):
         #print(f"\n\nLAYER {layer}\n")
@@ -194,11 +197,13 @@ def execute_unke(
         layer_out_ks = layer_out_ks[0] if type(layer_out_ks) is tuple else layer_out_ks
         
 
-        cur_zs,idxs = compute_ks(model, tok,batch_question, hparams, z_layer)
+        cur_zs_dict = compute_ks(model, tok, batch_question_ans, hparams, z_layer, idxs_dict)
+        targets_dict = {}
         
-        
-        targets = zs - cur_zs 
-        print("z error", torch.linalg.norm(targets, dim=0).mean())
+        for k, cur_zs_list in cur_zs_dict.items():
+            zs_list = zs_dict[k]
+            targets_list = [(a - b)/(len(hparams.layers) - i) for a, b in zip(zs_list, cur_zs_list)]
+            targets_dict[k] = targets_list
         # import ipdb;ipdb.set_trace()
         ex_tok = tok(ex_data, padding=True, return_tensors="pt").to(
             next(model.parameters()).device
@@ -236,9 +241,10 @@ def execute_unke(
         
         optimizer = optim.AdamW(params,lr=hparams.lr,eps=1e-8,betas = (0.9,0.999))
         
-        for i in range(len(idxs)):
-            
-            layer_out_ks[i,idxs[i]]+=resid[i]
+        for k, idxs_list in idxs_dict.items():
+            for j, idx in enumerate(idxs_list):
+                resid = targets_dict[k][j]
+                layer_out_ks[k,idx]+=resid
         
         # get_qwen2_causal_mask
         # llama2

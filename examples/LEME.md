@@ -190,3 +190,13 @@ python run_leme.py \
  --ds_size=2 \
  --data_type=ZsRE \
 ```
+The result output is a lot. we figure out what it's meaning in the [paper](https://arxiv.org/abs/2402.09394):
+` Edit consistency Subject`:`subject_and_main_passage`
+` Edit consistency Related`:`subject_and_related_passage`
+` Factual consistency Subject`:`related_entity_and_main_passage`
+` Factual consistency Related`:`related_entity_and_related_passage`
+` Internal consistency Subject`:`ground_truth_and_main_passage`
+` Internal consistency Related`:`ground_truth_and_related_passage`
+` Internal consistency Cross`:`main_passage_consistency`
+` Topicality`: `related_passage_consistency`
+` Naturalness`: `main_passage_and_related_passage`

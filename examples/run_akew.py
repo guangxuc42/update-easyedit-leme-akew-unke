@@ -8,7 +8,7 @@ from easyeditor import (
     FTHyperParams,
     MEMITHyperParams,
     ROMEHyperParams,
-    UnKEHyperParams,
+    AnyEditHyperParams,
     BaseEditor,
     summary_metrics,
 )
@@ -34,8 +34,8 @@ if __name__ == "__main__":
         editing_hparams = MEMITHyperParams
     elif args.editing_method == 'ROME':
         editing_hparams = ROMEHyperParams
-    elif args.editing_method == 'UnKE':
-        editing_hparams = UnKEHyperParams
+    elif args.editing_method == 'AnyEdit':
+        editing_hparams = AnyEditHyperParams
     else:
         raise NotImplementedError
 

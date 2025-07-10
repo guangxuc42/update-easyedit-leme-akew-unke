@@ -120,7 +120,7 @@ python run_akew.py \
  --editing_method=FT \
  --hparams_dir=../hparams/FT/qwen2.5-7b.yaml \
  --data_dir=../data/AKEW \
- --edit_type=extract \
+ --edit_type=extract \# [struct, unstruct, extract]
  --ds_size=2 \
- --data_type=WikiUpdate \
+ --data_type=WikiUpdate \# [CounterFact, MQuAKE-CF, WikiUpdate]
 ```
